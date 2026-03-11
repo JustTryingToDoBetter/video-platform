@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import os
 from sqlalchemy import text
+from app.db import engine
 
 app = FastAPI(title=os.getenv('APP_NAME', 'Video Platform API'), version='1.0.0')
 

@@ -1,6 +1,6 @@
 import os
 
-from sqlaclchemy import create_engine
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 DB_USER = os.getenv("POSTGRES_USER", "postgres")

@@ -1,10 +1,11 @@
 from app.celery_app import celery_app
 import json
+from pathlib import Path
 from app.db import SessionLocal
 from app.models import Job, JobStatus
 
 @celery_app.task(name="app.process_hello_job")
-def process_hello_job(job_id:int, name: str) -> str:
+def process_hello_job(job_id: int, name: str) -> str:
     db = SessionLocal()
 
     try:
@@ -33,4 +34,16 @@ def process_hello_job(job_id:int, name: str) -> str:
         raise
     finally:
         db.close()
-    
+
+
+
+@celery_app.task(name="app.process_uploaded_video_job")
+def process_uploaded_video_job(job_id: int) -> str:
+    db = SessionLocal()
+
+    try:
+        job = db.get(Job, job_id)
+        if job is None:
+            raise ValueError(f"Job with ID {job_id} not found")
+        
+        

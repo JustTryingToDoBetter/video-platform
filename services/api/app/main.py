@@ -11,6 +11,7 @@ from app.db import engine, get_db
 from app.models import Base, Job, JobStatus
 from app.redis_client import redis_client
 from app.tasks import process_hello_job
+from app.storage import ensure_upload_dir
 
 app = FastAPI(
     title=os.getenv("APP_NAME", "Video Platform API"),
@@ -21,6 +22,8 @@ app = FastAPI(
 @app.on_event("startup")
 def on_startup() -> None:
     Base.metadata.create_all(bind=engine)
+    if ensure_upload_dir:
+        ensure_upload_dir()
 
 
 @app.get("/health")

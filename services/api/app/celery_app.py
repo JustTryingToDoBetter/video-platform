@@ -11,7 +11,8 @@ CELERY_BACKEND_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
 celery_app = Celery(
     "video_platform",
     broker=CELERY_BROKER_URL,
-    backend=CELERY_BACKEND_URL
+    backend=CELERY_BACKEND_URL,
+    include=["app.tasks"]
 )
 
 celery_app.conf.update(

@@ -67,7 +67,6 @@ def process_uploaded_video_job(job_id: int) -> str:
             "file_size_bytes": file_path.stat().st_size,
             "content_type": job.content_type,
             "exists": True,
-            "media_metadata": media_meta,
         }
 
         job.status = JobStatus.SUCCESS

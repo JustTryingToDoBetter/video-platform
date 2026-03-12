@@ -145,6 +145,27 @@ def get_job(job_id: int, db: Session = Depends(get_db)) -> dict:
     }
 
 
+@app.get("/jobs/{job_id}/metadata")
+def get_job_metadata(job_id: int, db: Session = Depends(get_db)) -> dict:
+    job = db.get(Job, job_id)
+
+    if job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    if job.media_metadata is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Media metadata not available for this job",
+        )
+
+    return {
+        "job_id": job.id,
+        "job_type": job.job_type,
+        "status": job.status.value,
+        "media_metadata": json.loads(job.media_metadata),
+    }
+
+
 @app.get("/tasks/{task_id}")
 def get_task_status(task_id: str) -> dict[str, str | None]:
     task_result = AsyncResult(task_id, app=celery_app)

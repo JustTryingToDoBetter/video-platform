@@ -18,7 +18,7 @@ class Job(Base):
     __tablename__ = "jobs"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True) ## Auto-incrementing primary key
-    task_id: Mapped[str] = mapped_column(String(255), unique=True, index=True) ## Celery task ID
+    task_id: Mapped[str | None] = mapped_column(String(255), unique=True, nullable=True, index=True) ## Celery task ID
     job_type: Mapped[str] = mapped_column(String(50), nullable=False) ## Type
     status: Mapped[JobStatus] = mapped_column(
         SQLEnum(JobStatus, name="job_status"), 

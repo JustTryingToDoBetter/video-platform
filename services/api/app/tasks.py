@@ -2,6 +2,7 @@ from app.celery_app import celery_app
 import json
 from pathlib import Path
 from app.db import SessionLocal
+from app.media import extract_media_metadata
 from app.models import Job, JobStatus
 
 @celery_app.task(name="app.process_hello_job")
@@ -57,6 +58,8 @@ def process_uploaded_video_job(job_id: int) -> str:
         if not file_path.exists():
             raise FileNotFoundError(f"Uploaded file not found at {file_path}")
 
+        media_meta = extract_media_metadata(str(file_path))
+
         file_metadata = {
             "original_filename": job.original_filename,
             "stored_filename": job.stored_filename,
@@ -64,10 +67,12 @@ def process_uploaded_video_job(job_id: int) -> str:
             "file_size_bytes": file_path.stat().st_size,
             "content_type": job.content_type,
             "exists": True,
+            "media_metadata": media_meta,
         }
 
         job.status = JobStatus.SUCCESS
         job.result_payload = json.dumps(file_metadata)
+        job.media_metadata = json.dumps(media_meta)
         job.error_message = None
         db.commit()
 

@@ -176,6 +176,7 @@ def get_job(job_id: int, db: Session = Depends(get_db)) -> dict:
         "file_path": job.file_path,
         "file_size": job.file_size,
         "content_type": job.content_type,
+        "media_metadata": json.loads(job.media_metadata) if job.media_metadata else None,
         "created_at": job.created_at.isoformat(),
         "updated_at": job.updated_at.isoformat(),
     }

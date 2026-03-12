@@ -1,4 +1,5 @@
 import os
+import json
 
 from celery.result import AsyncResult
 from fastapi import FastAPI, Depends, HTTPException
@@ -8,7 +9,7 @@ from sqlalchemy import text
 from app.celery_app import celery_app
 from app.db import engine
 from app.redis_client import redis_client
-from app.tasks import say_hello
+from app.tasks import process_hello_job as say_hello
 from app.db import get_db
 from app.models import Base, Job, JobStatus
 

@@ -97,9 +97,16 @@ def create_upload_job(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ) -> dict:
+    ALLOWED_VIDEO_EXTENSIONS = {".mp4", ".mov", ".avi", ".mkv", ".webm", ".flv", ".wmv"}
+
     if not file.filename:
         raise HTTPException(status_code=400, detail="Uploaded file must have a filename")
-    if file.content_type is None or not file.content_type.startswith("video/"):
+
+    file_extension = Path(file.filename).suffix.lower()
+    is_video_content_type = file.content_type is not None and file.content_type.startswith("video/")
+    is_video_extension = file_extension in ALLOWED_VIDEO_EXTENSIONS
+
+    if not is_video_content_type and not is_video_extension:
         raise HTTPException(status_code=400, detail="Only video uploads are allowed")
     ensure_upload_dir()
 

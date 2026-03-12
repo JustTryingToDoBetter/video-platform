@@ -46,7 +46,7 @@ def process_uploaded_video_job(job_id: int) -> str:
         if job is None:
             raise ValueError(f"Job {job_id} not found")
 
-        job.status = JobStatus.PROCESSING ## Update the job status to "processing"
+        job.status = JobStatus.PROCESS ## Update the job status to "processing"
         db.commit()
 
         if not job.file_path:
@@ -66,7 +66,7 @@ def process_uploaded_video_job(job_id: int) -> str:
             "exists": True,
         }
 
-        job.status = JobStatus.COMPLETED
+        job.status = JobStatus.SUCCESS
         job.result_payload = json.dumps(file_metadata)
         job.error_message = None
         db.commit()
@@ -76,7 +76,7 @@ def process_uploaded_video_job(job_id: int) -> str:
     except Exception as exc:
         job = db.get(Job, job_id)
         if job is not None:
-            job.status = JobStatus.FAILED
+            job.status = JobStatus.FAILURE
             job.error_message = str(exc)
             db.commit()
         raise

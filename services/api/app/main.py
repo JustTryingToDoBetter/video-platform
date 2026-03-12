@@ -126,7 +126,7 @@ def create_upload_job(
         original_filename=original_filename,
         stored_filename=stored_filename,
         file_path=str(stored_path),
-        file_size_bytes=file_size_bytes,
+        file_size=file_size_bytes,
         content_type=file.content_type,
     )
     db.add(job)
@@ -145,7 +145,7 @@ def create_upload_job(
         "status": job.status.value,
         "original_filename": job.original_filename,
         "stored_filename": job.stored_filename,
-        "file_size_bytes": job.file_size_bytes,
+        "file_size": job.file_size,
     }
 
 
@@ -167,7 +167,7 @@ def get_job(job_id: int, db: Session = Depends(get_db)) -> dict:
         "original_filename": job.original_filename,
         "stored_filename": job.stored_filename,
         "file_path": job.file_path,
-        "file_size_bytes": job.file_size_bytes,
+        "file_size": job.file_size,
         "content_type": job.content_type,
         "created_at": job.created_at.isoformat(),
         "updated_at": job.updated_at.isoformat(),

@@ -28,43 +28,6 @@ def on_startup() -> None:
     ensure_upload_dir()
 
 
-@app.get("/health")
-def healthcheck() -> dict[str, str]:
-    return {
-        "status": "ok",
-        "service": "api",
-        "environment": os.getenv("APP_ENV", "development"),
-    }
-
-
-@app.get("/health/db")
-def database_healthcheck() -> dict[str, str]:
-    try:
-        with engine.connect() as connection:
-            connection.execute(text("SELECT 1"))
-        return {"status": "ok", "service": "api", "database": "connected"}
-    except Exception as exc:
-        return {
-            "status": "error",
-            "service": "api",
-            "database": "disconnected",
-            "detail": str(exc),
-        }
-
-
-@app.get("/health/redis")
-def redis_healthcheck() -> dict[str, str]:
-    try:
-        redis_client.ping()
-        return {"status": "ok", "service": "api", "redis": "connected"}
-    except Exception as exc:
-        return {
-            "status": "error",
-            "service": "api",
-            "redis": "disconnected",
-            "detail": str(exc),
-        }
-
 
 @app.post("/jobs/hello")
 def create_hello_job(name: str = "Jevonte", db: Session = Depends(get_db)) -> dict:

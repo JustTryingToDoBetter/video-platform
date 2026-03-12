@@ -10,7 +10,7 @@ class Base(DeclarativeBase):
 
 class JobStatus(str, Enum):
     QUEUED = "queued"
-    PROGRESS = "progress"
+    PROCESS = "process"
     SUCCESS = "success"
     FAILURE = "failure"
 
